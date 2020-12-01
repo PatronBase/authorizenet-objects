@@ -21,6 +21,9 @@ class Customer extends AbstractModel
     protected $driversLicense;
     protected $taxId;
 
+    protected $phoneNumber;
+    protected $faxNumber;
+
     public function __construct(
         $customerType = null,
         $id = null,
@@ -61,6 +64,14 @@ class Customer extends AbstractModel
             $data['taxId'] = $this->getTaxId();
         }
 
+        if ($this->hasPhoneNumber()) {
+            $data['phoneNumber'] = $this->getPhoneNumber();
+        }
+
+        if ($this->hasFaxNumber()) {
+            $data['faxNumber'] = $this->getFaxNumber();
+        }
+
         return $data;
     }
 
@@ -70,7 +81,9 @@ class Customer extends AbstractModel
             || $this->hasId()
             || $this->hasEmail()
             || $this->hasDriversLicense()
-            || $this->hasTaxId();
+            || $this->hasTaxId()
+            || $this->hasPhoneNumber()
+            || $this->hasFaxNumber();
     }
 
     protected function setCustomerType($value)
@@ -97,5 +110,15 @@ class Customer extends AbstractModel
     protected function setTaxId($value)
     {
         $this->taxId = $value;
+    }
+
+    protected function setPhoneNumber($value)
+    {
+        $this->phoneNumber = $value;
+    }
+
+    protected function setFaxNumber($value)
+    {
+        $this->faxNumber = $value;
     }
 }

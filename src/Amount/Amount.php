@@ -20,7 +20,7 @@ class Amount extends AbstractModel implements AmountInterface
     protected $amount;
 
     /**
-     * @var ISO???? currency code.
+     * @var string ISO 4217 3-character currency code.
      */
     protected $currencyCode;
 
@@ -134,7 +134,7 @@ class Amount extends AbstractModel implements AmountInterface
     }
 
     /**
-     * @return string The currency three-character ISO code
+     * @return string The currency three-character ISO 4217 code
      */
     public function getCurrencyCode()
     {
