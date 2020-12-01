@@ -4,13 +4,14 @@ namespace Academe\AuthorizeNet\Request;
 
 use Academe\AuthorizeNet\Request\Model\Subscription;
 use Academe\AuthorizeNet\Auth\MerchantAuthentication;
+use Academe\AuthorizeNet\SubscriptionRequestInterface;
 
 /**
  * Request to create a recurring billing subscription
  *
  * @see https://developer.authorize.net/api/reference/index.html#recurring-billing-create-a-subscription
  */
-class CreateSubscription extends AbstractRequest
+class CreateSubscription extends AbstractRequest implements SubscriptionRequestInterface
 {
     protected $objectName = 'ARBCreateSubscriptionRequest';
     protected $refId;
