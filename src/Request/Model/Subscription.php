@@ -24,8 +24,7 @@ class Subscription extends AbstractModel
     public function __construct(
         PaymentSchedule $paymentSchedule,
         AmountInterface $amount,
-        // not required according to the docs?
-        PaymentInterface $payment,
+        PaymentInterface $payment = null,
         $name = null,
         AmountInterface $trialAmount = null,
         Order $order = null,
