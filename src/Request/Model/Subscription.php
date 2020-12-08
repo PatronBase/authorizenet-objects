@@ -132,7 +132,7 @@ class Subscription extends AbstractModel
     /**
      * @param PaymentInterface $value
      */
-    protected function setPayment(PaymentInterface $value)
+    protected function setPayment(PaymentInterface $value = null)
     {
         $this->payment = $value;
     }
