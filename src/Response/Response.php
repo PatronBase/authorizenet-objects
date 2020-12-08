@@ -9,10 +9,11 @@ namespace Academe\AuthorizeNet\Response;
  * [ ] clientId
  */
 
+use Academe\AuthorizeNet\AbstractModel;
 use Academe\AuthorizeNet\Response\Collections\Messages;
+use Academe\AuthorizeNet\Response\Model\Profile;
 use Academe\AuthorizeNet\Response\Model\TransactionResponse;
 use Academe\AuthorizeNet\Response\Model\Transaction;
-use Academe\AuthorizeNet\AbstractModel;
 
 class Response extends AbstractModel
 {
@@ -24,11 +25,32 @@ class Response extends AbstractModel
     const RESULT_CODE_OK    = 'Ok';
     const RESULT_CODE_ERROR = 'Error';
 
+    /**
+     * @var string
+     */
     protected $refId;
+    /**
+     * @var Messages
+     */
     protected $messages;
+    /**
+     * @var Transaction
+     */
     protected $transaction;
+    /**
+     * @var TransactionResponse
+     */
     protected $transactionResponse;
     protected $token;
+
+    /**
+     * @var string Gateway-assigned identifier for the subscription; numeric string up to 13 digits
+     */
+    protected $subscriptionId;
+    /**
+     * @var Profile
+     */
+    protected $profile;
 
     // TODO: for "Decrypt Visa Checkout Data":
     // shippingInfo
@@ -40,8 +62,6 @@ class Response extends AbstractModel
     // transactions (collection of Transaction models)
     //
     // TODO: for Create a Subscription
-    // subscriptionId (single ID)
-    // profile (class, but several different forms to merge)
     // subscription (class)
     // status
     //
@@ -105,6 +125,16 @@ class Response extends AbstractModel
         if ($token = $this->getDataValue('token')) {
             $this->setToken($token);
         }
+
+        // Used in recurring billing
+        if ($subscriptionId = $this->getDataValue('subscriptionId')) {
+            $this->setSubscriptionId($subscriptionId);
+        }
+
+        // Used in recurring billing
+        if ($profile = $this->getDataValue('profile')) {
+            $this->setProfile(new Profile($profile));
+        }
     }
 
     /**
@@ -133,6 +163,14 @@ class Response extends AbstractModel
 
         if ($token = $this->getToken()) {
             $data['token'] = $token;
+        }
+
+        if ($subscriptionId = $this->getSubscriptionId()) {
+            $data['subscriptionId'] = $subscriptionId;
+        }
+
+        if ($profile = $this->getProfile()) {
+            $data['profile'] = $profile;
         }
 
         return $data;
@@ -170,5 +208,21 @@ class Response extends AbstractModel
     public function setToken($value)
     {
         $this->token = $value;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setSubscriptionId($value)
+    {
+        $this->subscriptionId = $value;
+    }
+
+    /**
+     * @param Profile $value
+     */
+    public function setProfile(Profile $value)
+    {
+        $this->profile = $value;
     }
 }
