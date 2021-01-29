@@ -11,6 +11,7 @@ namespace Academe\AuthorizeNet\Response;
 
 use Academe\AuthorizeNet\AbstractModel;
 use Academe\AuthorizeNet\Response\Collections\Messages;
+use Academe\AuthorizeNet\Response\Model\PaymentProfile;
 use Academe\AuthorizeNet\Response\Model\Profile;
 use Academe\AuthorizeNet\Response\Model\TransactionResponse;
 use Academe\AuthorizeNet\Response\Model\Transaction;
@@ -52,6 +53,11 @@ class Response extends AbstractModel
      */
     protected $profile;
 
+    /**
+     * @var PaymentProfile
+     */
+    protected $paymentProfile;
+
     // TODO: for "Decrypt Visa Checkout Data":
     // shippingInfo
     // billingInfo
@@ -61,7 +67,7 @@ class Response extends AbstractModel
     // TODO: for getUnsettledTransactionListResponse
     // transactions (collection of Transaction models)
     //
-    // TODO: for Create a Subscription
+    // TODO: for Create a Subscription ----- @todo for Leith
     // subscription (class)
     // status
     //
@@ -79,7 +85,6 @@ class Response extends AbstractModel
     // validationDirectResponse (string)
     // defaultPaymentProfile (boolean)
     //
-    // paymentProfile (single)
     // subscriptionIds (collection)
     // paymentProfiles (collection)
     //
@@ -134,6 +139,11 @@ class Response extends AbstractModel
         // Used in recurring billing
         if ($profile = $this->getDataValue('profile')) {
             $this->setProfile(new Profile($profile));
+        }
+
+        // Used in customer profiles
+        if ($paymentProfile = $this->getDataValue('paymentProfile')) {
+            $this->setPaymentProfile(new PaymentProfile($paymentProfile));
         }
     }
 
@@ -224,5 +234,13 @@ class Response extends AbstractModel
     public function setProfile(Profile $value)
     {
         $this->profile = $value;
+    }
+
+    /**
+     * @param PaymentProfile $value
+     */
+    public function setPaymentProfile(PaymentProfile $value)
+    {
+        $this->paymentProfile = $value;
     }
 }
