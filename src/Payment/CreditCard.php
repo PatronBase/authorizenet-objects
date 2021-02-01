@@ -14,14 +14,23 @@ class CreditCard extends AbstractModel implements PaymentInterface
     protected $cardNumber;
     protected $expirationDate;
     protected $cardCode;
+    protected $cardType;
+    protected $issuerNumber;
 
-    public function __construct($cardNumber, $expirationDate, $cardCode = null)
-    {
+    public function __construct(
+        $cardNumber,
+        $expirationDate,
+        $cardCode = null,
+        $cardType = null,
+        $issuerNumber = null
+    ) {
         parent::__construct();
 
         $this->setCardNumber($cardNumber);
         $this->setExpirationDate($expirationDate);
         $this->setCardCode($cardCode);
+        $this->setCardType($cardType);
+        $this->setIssuerNumber($issuerNumber);
     }
 
     public function jsonSerialize()
@@ -33,6 +42,14 @@ class CreditCard extends AbstractModel implements PaymentInterface
 
         if ($this->hasCardCode()) {
             $data['cardCode'] = $this->getCardCode();
+        }
+
+        if ($this->hasCardType()) {
+            $data['cardType'] = $this->getCardType();
+        }
+
+        if ($this->hasIssuerNumber()) {
+            $data['issuerNumber'] = $this->getIssuerNumber();
         }
 
         return $data;
@@ -69,5 +86,15 @@ class CreditCard extends AbstractModel implements PaymentInterface
     protected function setCardCode($value)
     {
         $this->cardCode = $value;
+    }
+
+    protected function setCardType($value)
+    {
+        $this->cardType = $value;
+    }
+
+    protected function setIssuerNumber($value)
+    {
+        $this->issuerNumber = $value;
     }
 }

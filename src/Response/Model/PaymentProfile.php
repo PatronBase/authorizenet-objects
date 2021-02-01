@@ -19,6 +19,8 @@ class PaymentProfile extends RequestPaymentProfile
     protected $customerProfileId;
     /** @var string */
     protected $customerPaymentProfileId;
+    /** @var string[] */
+    protected $subscriptionIds;
 
     public function __construct($data)
     {
@@ -50,7 +52,9 @@ class PaymentProfile extends RequestPaymentProfile
                         $payment = new CreditCard(
                             $this->getDataValue('payment.creditCard.cardNumber'),
                             $this->getDataValue('payment.creditCard.expirationDate'),
-                            $this->getDataValue('payment.creditCard.cardCode')
+                            $this->getDataValue('payment.creditCard.cardCode'),
+                            $this->getDataValue('payment.creditCard.cardType'),
+                            $this->getDataValue('payment.creditCard.issuerNumber')
                         );
                         break;
                     case OpaqueData::class:
@@ -67,14 +71,41 @@ class PaymentProfile extends RequestPaymentProfile
         $this->setCustomerProfileId($this->getDataValue('customerProfileId'));
         // @todo have backup on data value using paymentProfileId?
         $this->setPaymentProfileId($this->getDataValue('customerPaymentProfileId'));
+        $this->setSubscriptionIds($this->getDataValue('subscriptionIds'));
     }
 
     public function jsonSerialize()
     {
-        $data = parent::jsonSerialize();
+        $data = [];
 
         if ($this->hasCustomerProfileId()) {
             $data['customerProfileId'] = $this->getCustomerProfileId();
+        }
+
+        if ($this->hasPaymentProfileId()) {
+            $data['customerPaymentProfileId'] = $this->getPaymentProfileId();
+        }
+
+        if ($this->hasPayment()) {
+            $data['payment'] = [
+                $this->getPayment()->getObjectName() => $this->getPayment(),
+            ];
+        }
+
+        if ($this->hasSubscriptionIds()) {
+            $data['subscriptionIds'] = $this->getSubscriptionIds();
+        }
+
+        if ($this->hasCustomerType()) {
+            $data['customerType'] = $this->getCustomerType();
+        }
+
+        if ($this->hasBillTo()) {
+            $billTo = $this->getBillTo();
+
+            if ($billTo->hasAny()) {
+                $data['billTo'] = $billTo;
+            }
         }
 
         return $data;
@@ -96,5 +127,14 @@ class PaymentProfile extends RequestPaymentProfile
     protected function setCustomerProfileId($value)
     {
         $this->customerProfileId = $value;
+    }
+
+    /**
+     * @param string[] $value
+     * @return void
+     */
+    protected function setSubscriptionIds($value)
+    {
+        $this->subscriptionIds = $value;
     }
 }
