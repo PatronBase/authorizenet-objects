@@ -2,10 +2,8 @@
 
 namespace Academe\AuthorizeNet\Response\Model;
 
+use Academe\AuthorizeNet\Payment\BankAccount;
 use Academe\AuthorizeNet\Payment\CreditCard;
-use Academe\AuthorizeNet\Payment\OpaqueData;
-use InvalidArgumentException;
-use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
 class PaymentProfileTest extends TestCase
@@ -56,16 +54,20 @@ class PaymentProfileTest extends TestCase
         );
     }
 
-    public function testOpaqueData()
+    public function testBankAccount()
     {
         $profile = new PaymentProfile([
             "customerProfileId" => "39598611",
             "customerPaymentProfileId" => "35936989",
             "payment" => [
-                "opaqueData" => [
-                    "dataDescriptor" => "COMMON.ACCEPT.INAPP.PAYMENT",
-                    "dataValue" => "<long base64 string>",
-                ],
+                "bankAccount" => [
+                    "accountType" => "checking",
+                    "routingNumber" => "123456789",
+                    "accountNumber" => "12345678901234567",
+                    "nameOnAccount" => "J SMITH",
+                    "echeckType" => "WEB",
+                    "bankName" => "Bank of New Zealand",
+                ]
             ],
             "subscriptionIds" => [
                 "3078153",
@@ -78,8 +80,8 @@ class PaymentProfileTest extends TestCase
             ],
         ]);
         $this->assertTrue($profile->hasAny());
-        $this->assertInstanceOf(OpaqueData::class, $profile->getPayment());
+        $this->assertInstanceOf(BankAccount::class, $profile->getPayment());
     }
 
-    // @todo invlaid args tests
+    // @todo invlaid args tests?
 }
