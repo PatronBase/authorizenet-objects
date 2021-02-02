@@ -42,11 +42,15 @@ class GetCustomerPaymentProfile extends AbstractRequest
         $data['customerProfileId'] = $this->getCustomerProfileId();
         $data['customerPaymentProfileId'] = $this->getCustomerPaymentProfileId();
 
+        if ($this->hasUnmaskExpirationDate()) {
+            $data['unmaskExpirationDate'] = $this->getUnmaskExpirationDate();
+        }
+
         return [$this->getObjectName() => $data];
     }
 
     /**
-     * @param string $refId Merchant-assigned reference ID for the request.
+     * @param string $value Merchant-assigned reference ID for the request.
      */
     protected function setRefId($value)
     {
@@ -54,7 +58,7 @@ class GetCustomerPaymentProfile extends AbstractRequest
     }
 
     /**
-     * @param string $transId The Authorize.Net assigned identification number for a customer profile.
+     * @param string $value The Authorize.Net assigned identification number for a customer profile.
      */
     protected function setCustomerProfileId($value)
     {
@@ -62,10 +66,18 @@ class GetCustomerPaymentProfile extends AbstractRequest
     }
 
     /**
-     * @param string $transId The Authorize.Net assigned identification number for a customer payment profile.
+     * @param string $value The Authorize.Net assigned identification number for a customer payment profile.
      */
     protected function setCustomerPaymentProfileId($value)
     {
         $this->customerPaymentProfileId = $value;
+    }
+
+    /**
+     * @param bool $value  Whether or not to unmask the expiration date (masked is 'XXXX', unmasked is 'YYYY-MM')
+     */
+    protected function setUnmaskExpirationDate($value)
+    {
+        $this->unmaskExpirationDate = $value;
     }
 }

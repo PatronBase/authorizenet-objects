@@ -13,7 +13,10 @@ class GetCustomerPaymentProfileTest extends TestCase
     public function setUp()
     {
         $auth = new MerchantAuthentication("5KP3u95bQpv", "346HZ32z3fP4hTG2");
-        $this->request = (new GetCustomerPaymentProfile($auth, '10000', '20000'))->with(['refId' => '123456']);
+        $this->request = (new GetCustomerPaymentProfile($auth, '10000', '20000'))->with([
+            'refId' => '123456',
+            'unmaskExpirationDate' => false,
+        ]);
     }
 
     /**
@@ -34,11 +37,12 @@ class GetCustomerPaymentProfileTest extends TestCase
                 "refId" => "123456",
                 "customerProfileId" => "10000",
                 "customerPaymentProfileId" => "20000",
+                "unmaskExpirationDate" => false,
             ],
         ];
         $this->assertSame($data, $this->request->toData(true));
         $this->assertSame(
-            '{"getCustomerPaymentProfileRequest":{"merchantAuthentication":{"name":"5KP3u95bQpv","transactionKey":"346HZ32z3fP4hTG2"},"refId":"123456","customerProfileId":"10000","customerPaymentProfileId":"20000"}}',
+            '{"getCustomerPaymentProfileRequest":{"merchantAuthentication":{"name":"5KP3u95bQpv","transactionKey":"346HZ32z3fP4hTG2"},"refId":"123456","customerProfileId":"10000","customerPaymentProfileId":"20000","unmaskExpirationDate":false}}',
             json_encode($this->request)
         );
     }
