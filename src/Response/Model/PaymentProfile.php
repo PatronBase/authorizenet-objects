@@ -2,8 +2,8 @@
 
 namespace Academe\AuthorizeNet\Response\Model;
 
+use Academe\AuthorizeNet\Payment\BankAccount;
 use Academe\AuthorizeNet\Payment\CreditCard;
-use Academe\AuthorizeNet\Payment\OpaqueData;
 use Academe\AuthorizeNet\Request\Model\NameAddress;
 use Academe\AuthorizeNet\Request\Model\PaymentProfile as RequestPaymentProfile;
 use Academe\AuthorizeNet\Response\HasDataTrait;
@@ -57,13 +57,16 @@ class PaymentProfile extends RequestPaymentProfile
                             $this->getDataValue('payment.creditCard.issuerNumber')
                         );
                         break;
-                    case OpaqueData::class:
-                        $payment = new OpaqueData(
-                            $this->getDataValue('payment.opaqueData.dataDescriptor'),
-                            $this->getDataValue('payment.opaqueData.dataValue')
-                        );
+                    case BankAccount::class:
+                        $payment = (new BankAccount())->with([
+                            'accountType' => $this->getDataValue('payment.bankAccount.accountType'),
+                            'routingNumber' => $this->getDataValue('payment.bankAccount.routingNumber'),
+                            'accountNumber' => $this->getDataValue('payment.bankAccount.accountNumber'),
+                            'nameOnAccount' => $this->getDataValue('payment.bankAccount.nameOnAccount'),
+                            'echeckType' => $this->getDataValue('payment.bankAccount.echeckType'),
+                            'bankName' => $this->getDataValue('payment.bankAccount.bankName'),
+                        ]);
                         break;
-                    // @todo other payment types
                 }
                 $this->setPayment($payment);
             }
