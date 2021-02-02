@@ -126,6 +126,11 @@ class BankAccount extends AbstractModel implements PaymentInterface
         $this->accountNumber = $value;
     }
 
+    protected function setBankName($value)
+    {
+        $this->bankName = $value;
+    }
+
     // 22-Character Maximum
     protected function setNameOnAccount($value)
     {
