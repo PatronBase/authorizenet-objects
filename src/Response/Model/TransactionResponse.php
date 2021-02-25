@@ -11,6 +11,7 @@ use Academe\AuthorizeNet\Response\HasDataTrait;
 
 use Academe\AuthorizeNet\Response\Collections\TransactionMessages;
 use Academe\AuthorizeNet\Response\Model\PrePaidCard;
+use Academe\AuthorizeNet\Response\Model\Subscription;
 use Academe\AuthorizeNet\Response\Collections\Errors;
 use Academe\AuthorizeNet\Response\Collections\UserFields;
 
@@ -179,6 +180,16 @@ class TransactionResponse extends AbstractModel
     protected $splitTenderId;
 
     /**
+     * @property bool $recurringBilling
+     */
+    protected $recurringBilling;
+
+    /**
+     * @property Subscription $subscription
+     */
+    protected $subscription;
+
+    /**
      * @property
      * TBC class
      * $prePaidCard
@@ -259,6 +270,12 @@ class TransactionResponse extends AbstractModel
         $this->setAccountType($this->getDataValue('accountType'));
         $this->setSplitTenderId($this->getDataValue('splitTenderId'));
 
+        $this->setRecurringBilling($this->getDataValue('recurringBilling') == "true");
+
+        if ($subscription = $this->getDataValue('subscription')) {
+            $this->setSubscription(new Subscription($subscription));
+        }
+
         if ($prePaidCard = $this->getDataValue('prePaidCard')) {
             $this->setPrePaidCard(new PrePaidCard($prePaidCard));
         }
@@ -271,6 +288,7 @@ class TransactionResponse extends AbstractModel
             $this->setErrors(new Errors($errors));
         }
 
+        // @todo datapoint doesn't exist, only splitTenderId - the model name is also wrongly plural?
         if ($splitTenderPayments = $this->getDataValue('splitTenderPayments')) {
             $this->setSplitTenderPayments(new SplitTenderPayments($splitTenderPayments));
         }
@@ -296,7 +314,12 @@ class TransactionResponse extends AbstractModel
             'accountNumber' => $this->getAccountNumber(),
             'entryMode' => $this->getEntryMode(),
             'accountType' => $this->getAccountType(),
+            'recurringBilling' => $this->getRecurringBilling(),
         ];
+
+        if ($this->hasSubscription()) {
+            $data['subscription'] = $this->getSubscription();
+        }
 
         if ($this->hasSplitTenderId()) {
             $data['splitTenderId'] = $this->getSplitTenderId();
