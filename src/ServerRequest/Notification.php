@@ -51,6 +51,8 @@ class Notification extends AbstractModel
     const EVENT_ACTION_TERMINATED = 'terminated';
     const EVENT_ACTION_CANCELLED = 'cancelled';
     const EVENT_ACTION_EXPIRING = 'expiring';
+    const EVENT_ACTION_EXPIRED = 'expired';
+    const EVENT_ACTION_FAILED = 'failed';
     const EVENT_ACTION_HELD = 'held';
     const EVENT_ACTION_APPROVED = 'approved';
     const EVENT_ACTION_DECLINED = 'declined';
