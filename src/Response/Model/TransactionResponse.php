@@ -410,6 +410,16 @@ class TransactionResponse extends AbstractModel
         $this->splitTenderId = $value;
     }
 
+    protected function setRecurringBilling($value)
+    {
+        $this->recurringBilling = $value;
+    }
+
+    protected function setSubscription($value)
+    {
+        $this->subscription = $value;
+    }
+
     protected function setPrePaidCard(PrePaidCard $value)
     {
         $this->prePaidCard = $value;
